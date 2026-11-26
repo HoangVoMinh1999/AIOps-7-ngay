@@ -1,0 +1,8 @@
+# Request rate
+sum(rate(http_requests_total{service="api"}[2m]))
+
+# HTTP 5xx
+100 * sum(rate(http_requests_total{service="api",status=~"5.."}[2m])) / sum(rate(http_requests_total{service="api"}[2m]))
+
+# p95 latency
+histogram_quantile(0.95, sum by (service, le) (rate(http_request_duration_seconds_bucket{service=~"api|backend"}[2m])))

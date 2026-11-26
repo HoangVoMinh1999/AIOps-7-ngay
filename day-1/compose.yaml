@@ -1,0 +1,50 @@
+services:
+  api:
+    build: .
+    image: aiops-day1-app
+    command: ["python", "-u", "service.py"]
+    environment:
+      SERVICE: api
+    ports:
+      - "127.0.0.1:18080:8080"
+    depends_on:
+      - backend
+
+  backend:
+    build: .
+    image: aiops-day1-app
+    command: ["python", "-u", "service.py"]
+    environment:
+      SERVICE: backend
+      BACKEND_DELAY_MS: "${BACKEND_DELAY_MS:-20}"
+
+  traffic:
+    build: .
+    image: aiops-day1-app
+    command: ["python", "-u", "traffic.py"]
+    depends_on:
+      - api
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    ports:
+      - "127.0.0.1:19090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+
+  grafana:
+    image: grafana/grafana:12.1.0
+    ports:
+      - "127.0.0.1:13000:3000"
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_USERS_DEFAULT_THEME: light
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus-data:

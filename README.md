@@ -35,6 +35,8 @@ Mỗi ngày dành khoảng **30 phút đọc, 90 phút làm, 30 phút ghi bằng
 
 ## Lịch học và tiêu chí tự kiểm tra
 
+[Khởi động playground Ngày 1](day-1/README.md)
+
 | Ngày | Học và làm | Kết quả cần có |
 |---|---|---|
 | **1 · Metrics** | Dựng hai service, phát traffic đều. Expose số request, số lỗi và histogram độ trễ. Viết PromQL cho request rate, tỷ lệ 5xx và p95. Tăng độ trễ backend trong vài phút rồi đưa về bình thường. | Dashboard cho thấy p95 tăng và phục hồi. Lưu ba truy vấn và đánh dấu khoảng thời gian bị ảnh hưởng. [PromQL functions](https://prometheus.io/docs/prometheus/latest/querying/functions/) |
